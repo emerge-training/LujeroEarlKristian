@@ -78,7 +78,7 @@ func deleteTask(id as string) as bool
 func getTasks as DynamicMap
 {
     var v = new vector<Task>
-    var it = assert db.querySync(db.prepareQueryAllStatementSync(TASK))
+    var it = assert db.querySync(db.prepareQueryAllStatementSync(TASK)):
         return null
     while it {
         var o = it.next()
