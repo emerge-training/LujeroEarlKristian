@@ -10,7 +10,8 @@ class:
 model Note
 {
     id as string
-    name as string
+    title as string
+    description as string
     timeStampAdded as long
     timeStampLastUpdated as long
 }
@@ -43,16 +44,17 @@ func updateTable(table as SQLTableInfo)
 func updateTables
 {
     var note = SQLTableInfo.forName(NOTE)
-    note.addStringKeyColumn("id")
-    note.addStringColumn("name")
+    note.addIntegerKeyColumn("id")
+    note.addStringColumn("title")
     note.addStringColumn("description")
+    note.addLongColumn("timeStampAdded")
+    note.addLongColumn("timeStampLastUpdated")
     updateTable(note)
 }
 
 func addNote(note as Note) as Note
 {
     assert note
-    note.setId("1")
     note.setTimeStampAddedValue(SystemClock.asUTCSeconds())
     assert db.executeSync(db.prepareInsertStatementSync(NOTE, note.toDynamicMap()))
     return note
@@ -74,7 +76,7 @@ func deleteNote(id as string) as bool
     return db.executeSync(db.prepareDeleteStatementSync(NOTE, criteria.toDynamicMap()))
 }
 
-func getNotes as DynamicMap
+func getNote as DynamicMap
 {
     var v = new vector<Note>
     var it = assert db.querySync(db.prepareQueryAllStatementSync(NOTE)):
